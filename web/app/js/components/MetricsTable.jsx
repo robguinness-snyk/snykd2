@@ -206,14 +206,6 @@ const columnDefinitions = (resource, showNamespaceColumn, showNameColumn, Prefix
     },
   ];
 
-  const meshedColumn = {
-    title: <Trans>columnTitleMeshed</Trans>,
-    dataIndex: 'pods.totalPods',
-    isNumeric: true,
-    render: d => !d.pods ? null : `${d.pods.meshedPods}/${d.pods.totalPods}`,
-    sorter: d => !d.pods ? -1 : d.pods.totalPods,
-  };
-
   const grafanaColumn = {
     title: <Trans>columnTitleGrafana</Trans>,
     key: 'grafanaDashboard',
@@ -299,10 +291,6 @@ const columnDefinitions = (resource, showNamespaceColumn, showNameColumn, Prefix
     columns = columns.concat(gatewayColumns);
   } else {
     columns = columns.concat(httpStatColumns);
-  }
-
-  if (!isAuthorityTable && !isTrafficSplitTable && !isGatewayTable && !isServicesTable) {
-    columns.splice(1, 0, meshedColumn);
   }
 
   if (!isTrafficSplitTable) {

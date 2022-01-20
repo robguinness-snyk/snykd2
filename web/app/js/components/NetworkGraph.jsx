@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime';
 import 'core-js/stable';
 import { forceCenter, forceLink, forceManyBody, forceSimulation } from 'd3-force';
 import { select, selectAll } from 'd3-selection';
+import { transition } from 'd3-transition';
 import PropTypes from 'prop-types';
 import React from 'react';
 import _get from 'lodash/get';
@@ -15,6 +16,12 @@ import { metricsPropType } from './util/MetricUtils.jsx';
 import { withContext } from './util/AppContext.jsx';
 import withREST from './util/withREST.jsx';
 
+import paymentsServiceLabel from '../../img/payments-service-label.png';
+import accountServiceLabel from '../../img/account-service-label.png';
+import fraudDetectionServiceLabel from '../../img/fraud-detection-service-label.png';
+import subscriptionServiceLabel from '../../img/subscription-service-label.png';
+import checkoutServiceLabel from '../../img/checkout-service.png';
+
 // create a Object with only the subset of functions/submodules/plugins that we need
 const d3 = {
   drag,
@@ -25,12 +32,13 @@ const d3 = {
   select,
   selectAll,
   format,
+  transition,
 };
 
 const defaultSvgWidth = 524;
-const defaultSvgHeight = 325;
+const defaultSvgHeight = 425;
 const defaultNodeRadius = 15;
-const margin = { top: 0, right: 0, bottom: 10, left: 0 };
+const margin = { top: 0, right: 0, bottom: 5, left: 0 };
 
 const simulation = d3.forceSimulation()
   .force(
@@ -43,13 +51,6 @@ const simulation = d3.forceSimulation()
   .force('center', d3.forceCenter(defaultSvgWidth / 2, defaultSvgHeight / 2));
 
 export class NetworkGraphBase extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // https://github.com/d3/d3-zoom/issues/32
-    d3.getEvent = (() => require('d3-selection').event); // eslint-disable-line global-require
-  }
-
   componentDidMount() {
     const container = document.getElementsByClassName('network-graph-container')[0];
     const width = !container ? defaultSvgWidth : container.getBoundingClientRect().width;
@@ -135,6 +136,11 @@ export class NetworkGraphBase extends React.Component {
       .attr('stroke', '#454242')
       .attr('marker-end', node => `url(#${node.source}/${node.target})`);
 
+    // div for the tooltip
+    const div = d3.select('body').append('div')
+      .attr('class', 'tooltip')
+      .style('opacity', 0);
+
     const nodeElements = this.svg.append('g')
       .selectAll('circle')
       .data(nodes)
@@ -145,8 +151,75 @@ export class NetworkGraphBase extends React.Component {
       .call(d3.drag()
         .on('start', NetworkGraphBase.dragstarted)
         .on('drag', NetworkGraphBase.dragged)
-        .on('end', NetworkGraphBase.dragended));
+        .on('end', NetworkGraphBase.dragended))
+      .on('click', event => {
+        div.transition()
+          .duration(200)
+          .style('opacity', 0.9);
+        div.html(`
+        <style>
+          .modalDialog {
+              position: fixed;
+              font-family: Arial, Helvetica, sans-serif;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              background: rgba(0, 0, 0, 0.8);
+              z-index: 99999;
+              opacity: 1;
+              -webkit-transition: opacity 400ms ease-in;
+              -moz-transition: opacity 400ms ease-in;
+              transition: opacity 400ms ease-in;
+              pointer-events: auto;
+          }
+          .modalDialog > div {
+              width: 400px;
+              position: relative;
+              margin: 10% auto;
+              padding: 5px 20px 13px 20px;
+              border-radius: 10px;
+              background: #fff;
+              background: -moz-linear-gradient(#fff, #999);
+              background: -webkit-linear-gradient(#fff, #999);
+              background: -o-linear-gradient(#fff, #999);
+          }
+          .close {
+              background: #606061;
+              color: #FFFFFF;
+              line-height: 25px;
+              position: absolute;
+              right: -12px;
+              text-align: center;
+              top: -10px;
+              width: 24px;
+              text-decoration: none;
+              font-weight: bold;
+              -webkit-border-radius: 12px;
+              -moz-border-radius: 12px;
+              border-radius: 12px;
+              -moz-box-shadow: 1px 1px 3px #000;
+              -webkit-box-shadow: 1px 1px 3px #000;
+              box-shadow: 1px 1px 3px #000;
+          }
+          .close:hover {
+              background: #00d9ff;
+          }
+        </style>
+        <div id="openModal" class="modalDialog">
+            <div>\t<a href="#close" title="Close" class="close" onClick="window.location.reload();">X</a>
 
+                \t<h2>Modal Box</h2>
+
+                <p>This is a sample modal box that can be created using the powers of CSS3.</p>
+                <p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
+            </div>
+        </div>
+        `)
+          .style('left', `${event.x}px`)
+          .style('top', `${event.y - 28}px`)
+          .style('position', 'absolute');
+      });
     const textElements = this.svg.append('g')
       .selectAll('text')
       .data(nodes)
@@ -156,6 +229,26 @@ export class NetworkGraphBase extends React.Component {
       .attr('font-size', 15)
       .attr('dx', 20)
       .attr('dy', 4);
+
+    const labels = {
+      'payment-service': `http://localhost:7777/${paymentsServiceLabel}`,
+      'account-service': `http://localhost:7777/${accountServiceLabel}`,
+      'fraud-detection-service': `http://localhost:7777/${fraudDetectionServiceLabel}`,
+      'checkout-service': `http://localhost:7777/${checkoutServiceLabel}`,
+      'subscription-service': `http://localhost:7777/${subscriptionServiceLabel}`,
+    };
+
+    const getRandomFrom = nodeId => {
+      return labels[nodeId];
+    };
+
+    const labelElements = this.svg.append('g')
+      .selectAll('image')
+      .data(nodes)
+      .enter()
+      .append('svg:image')
+      .attr('xlink:href', node => getRandomFrom(node.id))
+      .attr('height', '18');
 
     simulation.nodes(nodes).on('tick', () => {
       path
@@ -168,6 +261,10 @@ export class NetworkGraphBase extends React.Component {
       textElements
         .attr('x', node => node.x)
         .attr('y', node => node.y);
+
+      labelElements
+        .attr('x', node => node.x + 16)
+        .attr('y', node => node.y + 12);
     });
 
     simulation.force('link')

@@ -142,7 +142,9 @@ export const singularResource = resource => {
 export const friendlyTitle = singularOrPluralResource => {
   const resource = singularResource(singularOrPluralResource);
   let titleCase = _startCase(resource);
-  if (resource === 'replicationcontroller') {
+  if (resource === 'pod') {
+    titleCase = _startCase('service');
+  } else if (resource === 'replicationcontroller') {
     titleCase = _startCase('replication controller');
   } else if (resource === 'daemonset') {
     titleCase = _startCase('daemon set');

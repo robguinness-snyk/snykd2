@@ -153,7 +153,7 @@ class Namespaces extends React.Component {
               _isEmpty(deploymentsWithMetrics) ? null :
               <NetworkGraph namespace={ns} deployments={metrics.deployment} />
             }
-            {Namespaces.renderResourceSection('deployment', metrics.deployment)}
+            {/* {Namespaces.renderResourceSection('deployment', metrics.deployment)} */}
             {Namespaces.renderResourceSection('daemonset', metrics.daemonset)}
             {Namespaces.renderResourceSection('pod', metrics.pod)}
             {Namespaces.renderResourceSection('replicationcontroller', metrics.replicationcontroller)}
@@ -161,7 +161,7 @@ class Namespaces extends React.Component {
             {Namespaces.renderResourceSection('job', metrics.job)}
             {Namespaces.renderResourceSection('trafficsplit', metrics.trafficsplit)}
             {Namespaces.renderResourceSection('cronjob', metrics.cronjob)}
-            {Namespaces.renderResourceSection('replicaset', metrics.replicaset)}
+            {/* {Namespaces.renderResourceSection('replicaset', metrics.replicaset)} */}
 
             {
               noMetrics ? null :

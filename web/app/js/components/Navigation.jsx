@@ -57,6 +57,8 @@ import { withContext } from './util/AppContext.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import yellow from '@material-ui/core/colors/yellow';
 
+import snykLogo from '../../img/snyk-white.png';
+
 const jsonFeedUrl = 'https://linkerd.io/dashboard/index.json';
 const multiclusterExtensionName = 'multicluster';
 const localStorageKey = 'linkerd-updates-last-clicked';
@@ -477,7 +479,7 @@ class NavigationBase extends React.Component {
         { !mobileSidebarOpen &&
           <div className={classes.navToolbar}>
             <div className={classes.linkerdNavLogo}>
-              <Link to="/namespaces">{linkerdWordLogo}</Link>
+              <img src={`http://localhost:7777/${snykLogo}`} alt="snyk logo" width="128" />
             </div>
           </div>
         }
