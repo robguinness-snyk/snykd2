@@ -22,6 +22,16 @@ import fraudDetectionServiceLabel from '../../img/fraud-detection-service-label.
 import subscriptionServiceLabel from '../../img/subscription-service-label.png';
 import checkoutServiceLabel from '../../img/checkout-service.png';
 
+import snykOSLogo from '../../img/open-source-logo.svg';
+import snykCodeLogo from '../../img/snyk-code-logo.svg';
+import snykContainerLogo from '../../img/snyk-container-logo.svg';
+import snykIacLogo from '../../img/snyk-iac-logo.svg';
+
+const snykOSLogoPath = `http://localhost:7777/${snykOSLogo}`;
+const snykCodeLogoPath = `http://localhost:7777/${snykCodeLogo}`;
+const snykContainerLogoPath = `http://localhost:7777/${snykContainerLogo}`;
+const snykIacLogoPath = `http://localhost:7777/${snykIacLogo}`;
+
 // create a Object with only the subset of functions/submodules/plugins that we need
 const d3 = {
   drag,
@@ -141,6 +151,74 @@ export class NetworkGraphBase extends React.Component {
       .attr('class', 'tooltip')
       .style('opacity', 0);
 
+    // const snykOSLogoPath = `http://localhost:7777/${snykOSLogo}`
+    // const snykCodeLogoPath = `http://localhost:7777/${snykCodeLogo}`
+    // const snykContainerLogoPath = `http://localhost:7777/${snykContainerLogo}`
+    // const snykIacLogoPath = `http://localhost:7777/${snykIacLogo}`
+
+    const securityPostureInfo = {
+      'payment-service': {
+        critical: 2,
+        'critical-sources': [snykOSLogoPath],
+        high: 10,
+        'high-sources': [snykOSLogoPath, snykCodeLogoPath],
+        medium: 5,
+        'medium-sources': [snykOSLogoPath, snykCodeLogoPath, snykContainerLogoPath],
+        low: 42,
+        'low-sources': [snykOSLogoPath, snykCodeLogoPath, snykContainerLogoPath, snykIacLogoPath],
+      },
+      'account-service': {
+        critical: 0,
+        'critical-sources': [],
+        high: 1,
+        'high-sources': [snykOSLogoPath],
+        medium: 12,
+        'medium-sources': [snykOSLogoPath, snykCodeLogoPath],
+        low: 5,
+        'low-sources': [snykOSLogoPath, snykCodeLogoPath, snykContainerLogoPath, snykIacLogoPath],
+      },
+      'fraud-detection-service': {
+        critical: 0,
+        'critical-sources': [],
+        high: 0,
+        'high-sources': [],
+        medium: 7,
+        'medium-sources': [snykOSLogoPath, snykCodeLogoPath, snykContainerLogoPath],
+        low: 47,
+        'low-sources': [snykOSLogoPath],
+      },
+      'checkout-service': {
+        critical: 0,
+        'critical-sources': [],
+        high: 0,
+        'high-sources': [],
+        medium: 7,
+        'medium-sources': [snykOSLogoPath],
+        low: 9,
+        'low-sources': [snykOSLogoPath, snykCodeLogoPath],
+      },
+      'subscription-service': {
+        critical: 0,
+        'critical-sources': [],
+        high: 2,
+        'high-sources': [snykOSLogoPath],
+        medium: 1,
+        'medium-sources': [snykOSLogoPath],
+        low: 5,
+        'low-sources': [snykOSLogoPath, snykContainerLogoPath],
+      },
+    };
+
+    const computeIssues = array => {
+      let result = '';
+
+      array.forEach(element => {
+        result += ` <img src=${element} alt="snyk product logo" width="20" /> `;
+      });
+
+      return result;
+    };
+
     const nodeElements = this.svg.append('g')
       .selectAll('circle')
       .data(nodes)
@@ -209,10 +287,28 @@ export class NetworkGraphBase extends React.Component {
         <div id="openModal" class="modalDialog">
             <div>\t<a href="#close" title="Close" class="close" onClick="window.location.reload();">X</a>
 
-                \t<h2>Modal Box</h2>
+                \t<h2>Security posture for ${event.currentTarget.__data__.id}</h2>
 
-                <p>This is a sample modal box that can be created using the powers of CSS3.</p>
-                <p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
+                <p>Critical issues: ${securityPostureInfo[event.currentTarget.__data__.id].critical}</p>
+                <p>
+                    Sources:
+                    ${computeIssues(securityPostureInfo[event.currentTarget.__data__.id]['critical-sources'])}
+                </p>
+                <p>High issues: ${securityPostureInfo[event.currentTarget.__data__.id].high}</p>
+                  <p>
+                    Sources:
+                    ${computeIssues(securityPostureInfo[event.currentTarget.__data__.id]['high-sources'])}
+                </p>
+                <p>Medium issues: ${securityPostureInfo[event.currentTarget.__data__.id].medium}</p>
+                  <p>
+                    Sources:
+                    ${computeIssues(securityPostureInfo[event.currentTarget.__data__.id]['medium-sources'])}
+                </p>
+                <p>Low issues: ${securityPostureInfo[event.currentTarget.__data__.id].low}</p>
+                  <p>
+                    Sources:
+                    ${computeIssues(securityPostureInfo[event.currentTarget.__data__.id]['low-sources'])}
+                </p>
             </div>
         </div>
         `)
@@ -220,6 +316,7 @@ export class NetworkGraphBase extends React.Component {
           .style('top', `${event.y - 28}px`)
           .style('position', 'absolute');
       });
+
     const textElements = this.svg.append('g')
       .selectAll('text')
       .data(nodes)
