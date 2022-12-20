@@ -1399,6 +1399,15 @@
     make-plural "^6.2.2"
     messageformat-parser "^4.1.3"
 
+"@lingui/core@^3.15.0":
+  version "3.15.0"
+  resolved "https://registry.yarnpkg.com/@lingui/core/-/core-3.15.0.tgz#1f65bd6c1430133f1233dc9942c05c8bd9348e9d"
+  integrity sha512-owjYOn/3xaWVW01p32Ylt3cXkCP79oudJCHdcNOn4noxd/9BhyFX2wLiVf02DxGYnkAgAD3KCp3Z4iyKlueymg==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
+    make-plural "^6.2.2"
+    messageformat-parser "^4.1.3"
+
 "@lingui/macro@3.13.0":
   version "3.13.0"
   resolved "https://registry.yarnpkg.com/@lingui/macro/-/macro-3.13.0.tgz#accb4a97ff7109d76647a1114f6527037cab5fef"
