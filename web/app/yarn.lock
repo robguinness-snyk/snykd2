@@ -1399,6 +1399,15 @@
     make-plural "^6.2.2"
     messageformat-parser "^4.1.3"
 
+"@lingui/core@^3.15.0":
+  version "3.15.0"
+  resolved "https://registry.yarnpkg.com/@lingui/core/-/core-3.15.0.tgz#1f65bd6c1430133f1233dc9942c05c8bd9348e9d"
+  integrity sha512-owjYOn/3xaWVW01p32Ylt3cXkCP79oudJCHdcNOn4noxd/9BhyFX2wLiVf02DxGYnkAgAD3KCp3Z4iyKlueymg==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
+    make-plural "^6.2.2"
+    messageformat-parser "^4.1.3"
+
 "@lingui/macro@3.13.0":
   version "3.13.0"
   resolved "https://registry.yarnpkg.com/@lingui/macro/-/macro-3.13.0.tgz#accb4a97ff7109d76647a1114f6527037cab5fef"
@@ -1408,13 +1417,13 @@
     "@lingui/conf" "^3.13.0"
     ramda "^0.27.1"
 
-"@lingui/react@3.13.0":
-  version "3.13.0"
-  resolved "https://registry.yarnpkg.com/@lingui/react/-/react-3.13.0.tgz#3c0710b5d9d49e09e580a736681fabc80038ce85"
-  integrity sha512-FS5NqWHh8Ngj1jnF9Yg+lqnIaMT0SjPBzOT6MpiO36tsWNFAdehqM589utvBmaU0eeV+/CyTF02GH6rd4PjMBg==
+"@lingui/react@3.15.0":
+  version "3.15.0"
+  resolved "https://registry.yarnpkg.com/@lingui/react/-/react-3.15.0.tgz#6de83da27b4145e30f4dffc6a2947eecf3a954e4"
+  integrity sha512-Xq/48yf2IQhOPpgpqydj1OUyfDgNOY4aattmG4195LeqGPhN0ckiUCBLlNm0vHRsO3ZGwzfprTLYfI9WbfLBzA==
   dependencies:
     "@babel/runtime" "^7.11.2"
-    "@lingui/core" "^3.13.0"
+    "@lingui/core" "^3.15.0"
 
 "@material-ui/core@4.12.3":
   version "4.12.3"
