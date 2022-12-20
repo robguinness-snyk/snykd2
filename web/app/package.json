@@ -8,7 +8,7 @@
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
-    "@fortawesome/react-fontawesome": "0.1.16",
+    "@fortawesome/react-fontawesome": "0.2.0",
     "@lingui/core": "^3.13.0",
     "@lingui/macro": "3.13.0",
     "@lingui/react": "3.13.0",
